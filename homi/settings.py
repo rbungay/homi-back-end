@@ -14,8 +14,6 @@ import os # brings in operating system
 import environ
 import dj_database_url
 import django_heroku
-# from dotenv import load_dotenv
-# load_dotenv() # load environment variables
 
 env = environ.Env()
 environ.Env.read_env()
@@ -23,22 +21,20 @@ environ.Env.read_env()
 from pathlib import Path
 from datetime import timedelta
 
-# access environment variables
-GOOGLE_KEY = env('GOOGLE_KEY')
-SECRET_KEY = env('SECRET_KEY')
-DATABASE_URL = env('DATABASE_URL')
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# access environment variables
+GOOGLE_KEY = env('GOOGLE_KEY')
+SECRET_KEY = env('SECRET_KEY')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.herokuapp.com'] # TODO: change for deployment
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.herokuapp.com']
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
@@ -48,7 +44,6 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -66,14 +61,14 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Make sure this is after security and before all others
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 # Configuration for django-rest-framework-simplejwt
@@ -103,23 +98,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'homi.wsgi.application'
 
-
 # Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
-    'default': dj_database_url.config('DATABASE_URL')
-}
-
-# dev database below
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'homi',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL')
+    )
 }
 
 SIMPLE_JWT = {
@@ -128,7 +111,6 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': False,
-
     'ALGORITHM': 'HS256',
     'SIGNING_KEY': SECRET_KEY,
     'VERIFYING_KEY': None,
@@ -139,10 +121,7 @@ SIMPLE_JWT = {
     'TOKEN_TYPE_CLAIM': 'token_type',
 }
 
-
 # Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -158,27 +137,26 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'America/New_York'
-
 USE_I18N = True
-
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
 
-STATIC_URL = 'static/'
+# Extra places for collectstatic to find static files
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+
+# Simplified static file serving
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Configure Django App for Heroku
 django_heroku.settings(locals())

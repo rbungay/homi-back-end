@@ -4,5 +4,5 @@ from .models import Booking
 class BookingAdmin(admin.ModelAdmin):
     readonly_fields = ('total_price',)
 
-admin.site.register(Booking, BookingAdmin)
+admin.site.register(Booking, BookingAdmin) 
 

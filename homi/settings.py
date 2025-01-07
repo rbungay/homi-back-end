@@ -26,7 +26,7 @@ from datetime import timedelta
 # access environment variables
 GOOGLE_KEY = env('GOOGLE_KEY')
 SECRET_KEY = env('SECRET_KEY')
-# DATABASE_URL = env('DATABASE_URL')
+DATABASE_URL = env('DATABASE_URL')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -107,9 +107,9 @@ WSGI_APPLICATION = 'homi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': dj_database_url.config('DATABASE_URL')
-# }
+DATABASES = {
+    'default': dj_database_url.config('DATABASE_URL')
+}
 
 # dev database below
 

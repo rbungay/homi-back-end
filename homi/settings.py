@@ -107,12 +107,9 @@ WSGI_APPLICATION = 'homi.wsgi.application'
 # Production database configuration
 if APP_ENV != 'development':
     DATABASES = {
-        'default': dj_database_url.config(
-            'DATABASE_URL',
-            conn_max_age=600,  # Optional: Adjust connection max age
-            ssl_require=False  # Disable SSL
-        )
+        'default': dj_database_url.config(default=env('DATABASE_URL')),
     }
+
 
 if APP_ENV == 'development':
     DATABASES = {

@@ -22,7 +22,7 @@ services:
       - .env # Load environment variables from .env file
     environment:
       - APP_ENV=production
-      - DATABASE_URL=${DATABASE_URL}
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres # Reference the postgres container's name
       - SECRET_KEY=${SECRET_KEY}
     ports:
       - "8000:8000"

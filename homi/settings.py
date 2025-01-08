@@ -108,7 +108,7 @@ WSGI_APPLICATION = 'homi.wsgi.application'
 
 if os.getenv('APP_ENV') == 'production':
     DATABASES = {
-        'default': dj_database_url.parse(os.getenv('DATABASE_URL'), conn_max_age=600, ssl_require=False)
+        'default': dj_database_url.parse(os.getenv('DATABASE_URL'), conn_max_age=600, ssl_require=True)
     }
 else:  # For development
     DATABASES = {
@@ -117,7 +117,7 @@ else:  # For development
             'NAME': 'postgres',  # Ensure this is within the 63 character limit
             'USER': 'postgres',
             'PASSWORD': 'postgres',
-            'HOST': 'localhost',
+            'HOST': 'localhost',  # For development, the database is on the host
             'PORT': '5432',
             'OPTIONS': {
                 'sslmode': 'disable',

@@ -1,4 +1,5 @@
 services:
+  # PostgreSQL Service
   postgres:
     image: postgres:17
     container_name: homi-postgres
@@ -10,12 +11,15 @@ services:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    networks:
+      - homi-network
 
+  # Backend Service (Django)
   backend:
     build: .
     container_name: homi-backend
     env_file:
-      - .env
+      - .env # Load environment variables from .env file
     environment:
       - APP_ENV=production
       - DATABASE_URL=${DATABASE_URL}
@@ -23,8 +27,24 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - postgres
+      - postgres # Ensure PostgreSQL is up before backend
+    networks:
+      - homi-network
+
+  # Frontend Service (Optional, if you need a frontend)
+  # Uncomment this if you have a frontend service (e.g., React, Vue)
+  # frontend:
+  #   build: ./frontend
+  #   container_name: homi-frontend
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - homi-network
 
 volumes:
   postgres-data:
-    driver: local
+    driver: local # Store PostgreSQL data in Docker volume
+
+networks:
+  homi-network:
+    driver: bridge

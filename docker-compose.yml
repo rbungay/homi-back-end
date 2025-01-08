@@ -13,6 +13,18 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
+  backend:
+    build: .
+    container_name: homi-backend
+    environment:
+      - APP_ENV=production
+      - DATABASE_URL=${DATABASE_URL}
+      - SECRET_KEY=${SECRET_KEY}
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+
 volumes:
   postgres-data:
     driver: local

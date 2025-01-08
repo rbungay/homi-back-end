@@ -31,19 +31,9 @@ services:
     networks:
       - homi-network
 
-  # Frontend Service (Optional, if you need a frontend)
-  # Uncomment this if you have a frontend service (e.g., React, Vue)
-  # frontend:
-  #   build: ./frontend
-  #   container_name: homi-frontend
-  #   ports:
-  #     - "3000:3000"
-  #   networks:
-  #     - homi-network
-
 volumes:
   postgres-data:
-    driver: local # Store PostgreSQL data in Docker volume
+    driver: local
 
 networks:
   homi-network:

@@ -106,29 +106,21 @@ TEMPLATES = [
 WSGI_APPLICATION = 'homi.wsgi.application'
 
 
-# Production database configuration
-if APP_ENV != 'development':
+if os.getenv('APP_ENV') == 'production':
     DATABASES = {
-        'default': dj_database_url.config(
-            'DATABASE_URL',
-            conn_max_age=600,
-            ssl_require=False
-        )
+        'default': dj_database_url.parse(os.getenv('DATABASE_URL'), conn_max_age=600, ssl_require=False)
     }
-
-
-
-if APP_ENV == 'development':
+else:  # For development
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'postgres',
+            'NAME': 'postgres',  # Ensure this is within the 63 character limit
             'USER': 'postgres',
             'PASSWORD': 'postgres',
             'HOST': 'localhost',
             'PORT': '5432',
             'OPTIONS': {
-                'sslmode': 'disable',  # Explicitly disable SSL for PostgreSQL
+                'sslmode': 'disable',
             },
         }
     }

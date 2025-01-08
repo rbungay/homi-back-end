@@ -26,7 +26,9 @@ from datetime import timedelta
 # access environment variables
 GOOGLE_KEY = env('GOOGLE_KEY')
 SECRET_KEY = env('SECRET_KEY')
-APP_ENV = env('APP_ENV')
+APP_ENV = env('APP_ENV', default='development')
+DATABASE_URL = env('DATABASE_URL')
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

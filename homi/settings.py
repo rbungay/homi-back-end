@@ -38,7 +38,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.herokuapp.com'] # TODO: change for deployment
 
@@ -114,11 +114,11 @@ else:  # For development
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'postgres',  # Ensure this is within the 63 character limit
-            'USER': 'postgres',
-            'PASSWORD': 'postgres',
-            'HOST': 'localhost',  # For development, the database is on the host
-            'PORT': '5432',
+            'NAME': 'postgres',  # Database name in the container
+            'USER': 'postgres',  # Username
+            'PASSWORD': 'postgres',  # Password
+            'HOST': 'postgres',  # This must match the Docker service name
+            'PORT': '5432',  # PostgreSQL default port
             'OPTIONS': {
                 'sslmode': 'disable',
             },

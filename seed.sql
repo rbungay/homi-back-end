@@ -1,1 +1,6 @@
 CREATE DATABASE homi;
+
+CREATE USER homi_admin WITH PASSWORD 'password';
+
+GRANT ALL PRIVILEGES ON DATABASE homi TO homi_admin;
+
